@@ -18,16 +18,27 @@ import java.util.List;
         public static boolean lineValidation (String line) {
             String[] data = line.split(",");
             boolean result = false;
-            if (isNumber(data[Constants.PASSENGER_ID]) &&
-            (data[Constants.SURVIVED].equals("0") || data[Constants.SURVIVED].equals("1")) &&
-            (data[Constants.P_CLASS].equals("1") || data[Constants.P_CLASS].equals("2") || data[Constants.P_CLASS].equals("3")) &&
-            (data[Constants.SEX].equals("female") || data[Constants.SEX].equals("male")) &&
-            (data[Constants.AGE].equals("") || isNumber(data[Constants.AGE])) &&
-            (isNumber(data[Constants.SIB_SP])) &&
-            (isNumber(data[Constants.PARCH])) &&
-            (isNumber(data[Constants.FARE])) &&
-            (data[Constants.EMBARKED].length()<2)) {
-                result = true;
+            try {
+                if (isNumber(data[Constants.PASSENGER_ID]) &&
+                        (data[Constants.SURVIVED].equals("0") || data[Constants.SURVIVED].equals("1")) &&
+                        (data[Constants.P_CLASS].equals("1") || data[Constants.P_CLASS].equals("2") || data[Constants.P_CLASS].equals("3")) &&
+                        (data[Constants.SEX].equals("female") || data[Constants.SEX].equals("male")) &&
+                        (data[Constants.AGE].equals("") || isNumber(data[Constants.AGE])) &&
+                        (isNumber(data[Constants.SIB_SP])) &&
+                        (isNumber(data[Constants.PARCH])) &&
+                        (isNumber(data[Constants.FARE])) ) {
+
+                    if(data.length > Constants.EMBARKED){
+                       if(data[Constants.EMBARKED].length() < 2){
+                           result = true;
+                        }
+                    }else{
+                        result = true;
+                    }
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+                System.out.println(data[Constants.LAST_NAME] +  " " + data[Constants.FIRST_NAME] + " " + data[Constants.PASSENGER_ID]);
             }
             return result;
         }
@@ -35,15 +46,14 @@ import java.util.List;
         private static boolean isNumber (String number) {
             boolean result = true;
             if (number.contains(".")) {
-                number=number.replaceFirst(".", "");
+                number = number.replaceFirst("\\.", "");
             }
-            if (number.length()>0) {
+            if (number.length() > 0) {
                 for (int i = 0; i < number.length(); i++) {
-                    for (int j = 0; j <= 9; j++) {
-                        if (number.charAt(i) - '0' != j && j == 9) {
-                            result = false;
-                            break;
-                        }
+                    char c = number.charAt(i);
+                    if (c < '0' || c > '9') {
+                        result = false;
+                        break;
                     }
                 }
             } else {
@@ -66,7 +76,12 @@ import java.util.List;
             this.ticket = dataItems[Constants.TICKET];
             this.fare = Double.parseDouble(dataItems[Constants.FARE]);
             this.cabin = dataItems[Constants.CABIN];
-            this.embarked = (dataItems[Constants.EMBARKED].length()>0)? dataItems[Constants.EMBARKED].charAt(0) : ' ';
+            if(dataItems.length > 12){
+                this.embarked = dataItems[Constants.EMBARKED].charAt(0);
+            }else{
+                this.embarked = ' ';
+            }
+
         }
 
 
@@ -76,4 +91,21 @@ import java.util.List;
             return firstName + " " + lastName;
         }
 
+        @Override
+        public String toString() {
+            return "\nPassenger{" +
+                    "passengerId=" + passengerId +
+                    ", survived=" + survived +
+                    ", pClass=" + pClass +
+                    ", name='" + name + '\'' +
+                    ", isMale=" + isMale +
+                    ", age=" + age +
+                    ", sibSp=" + sibSp +
+                    ", parch=" + parch +
+                    ", ticket='" + ticket + '\'' +
+                    ", fare=" + fare +
+                    ", cabin='" + cabin + '\'' +
+                    ", embarked=" + embarked +
+                    '}';
+        }
     }
