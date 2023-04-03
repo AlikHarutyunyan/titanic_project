@@ -18,15 +18,15 @@ import java.util.List;
         public static boolean lineValidation (String line) {
             String[] data = line.split(",");
             boolean result = false;
-            if (isNumber(data[0]) &&
-            (data[1].equals("0") || data[1].equals("1")) &&
-            (data[2].equals("1") || data[2].equals("2") || data[2].equals("3")) &&
-            (data[5].equals("female") || data[5].equals("male")) &&
-            (data[6].equals("") || isNumber(data[6])) &&
-            (isNumber(data[7])) &&
-            (isNumber(data[8])) &&
-            (isNumber(data[10])) &&
-            (data[12].length()<2)) {
+            if (isNumber(data[Constants.PASSENGER_ID]) &&
+            (data[Constants.SURVIVED].equals("0") || data[Constants.SURVIVED].equals("1")) &&
+            (data[Constants.P_CLASS].equals("1") || data[Constants.P_CLASS].equals("2") || data[Constants.P_CLASS].equals("3")) &&
+            (data[Constants.SEX].equals("female") || data[Constants.SEX].equals("male")) &&
+            (data[Constants.AGE].equals("") || isNumber(data[Constants.AGE])) &&
+            (isNumber(data[Constants.SIB_SP])) &&
+            (isNumber(data[Constants.PARCH])) &&
+            (isNumber(data[Constants.FARE])) &&
+            (data[Constants.EMBARKED].length()<2)) {
                 result = true;
             }
             return result;

@@ -10,5 +10,21 @@ public class Constants {
     public static final int COMBO_BOX_WIDTH = 80;
     public static final int COMBO_BOX_HEIGHT = 30;
 
+    public static final int PASSENGER_ID = 0;
+    public static final int SURVIVED = 1;
+    public static final int P_CLASS = 2;
+    public static final int FIRST_NAME = 3;
+    public static final int LAST_NAME = 4;
+    public static final int SEX = 5;
+    public static final int AGE = 6;
+    public static final int SIB_SP = 7;
+    public static final int PARCH = 8;
+    public static final int TICKET = 9;
+    public static final int FARE = 10;
+    public static final int CABIN = 11;
+    public static final int EMBARKED = 12;
+
+
+
 
 }
