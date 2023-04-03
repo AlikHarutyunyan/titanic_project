@@ -14,6 +14,7 @@ public class ManageScreen extends JPanel {
         File file = new File(Constants.PATH_TO_DATA_FILE); //this is the path to the data file
         if (file.exists()) {
             List<Passenger> allPassengers = readData(file);
+            System.out.println(allPassengers);
             this.setLayout(null);
             this.setBounds(x, y + Constants.MARGIN_FROM_TOP, width, height);
             JLabel survivedLabel = new JLabel("Passenger Class: ");

@@ -7,7 +7,7 @@ import java.util.List;
         private int pClass;
         private String name;
         private boolean isMale;
-        private float age;
+        private Float age;
         private int sibSp;
         private int parch;
         private String ticket;
@@ -59,14 +59,21 @@ import java.util.List;
             this.survived = dataItems[Constants.SURVIVED].equals("1");
             this.pClass = Integer.parseInt(dataItems[Constants.P_CLASS]);
             this.name = this.getFormattedName(dataItems[Constants.LAST_NAME],dataItems[Constants.FIRST_NAME]);
-
+            this.isMale = dataItems[Constants.SEX].equals("male");
+            this.age = (dataItems[Constants.AGE].equals(""))?null : Float.parseFloat(dataItems[Constants.AGE]);
+            this.sibSp = Integer.parseInt(dataItems[Constants.SIB_SP]);
+            this.parch = Integer.parseInt(dataItems[Constants.PARCH]);
+            this.ticket = dataItems[Constants.TICKET];
+            this.fare = Double.parseDouble(dataItems[Constants.FARE]);
+            this.cabin = dataItems[Constants.CABIN];
+            this.embarked = (dataItems[Constants.EMBARKED].length()>0)? dataItems[Constants.EMBARKED].charAt(0) : ' ';
         }
 
 
 
         private String getFormattedName(String lastName, String firstName) {
-
-        return null;
+            firstName = firstName.substring(firstName.indexOf('.')+1).trim();
+            return firstName + " " + lastName;
         }
 
     }
