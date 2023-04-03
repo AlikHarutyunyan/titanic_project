@@ -88,24 +88,14 @@ import java.util.List;
 
         private String getFormattedName(String lastName, String firstName) {
             firstName = firstName.substring(firstName.indexOf('.')+1).trim();
-            return firstName + " " + lastName;
+            String fullName = firstName + " " + lastName;
+            return fullName;
         }
 
         @Override
         public String toString() {
-            return "\nPassenger{" +
-                    "passengerId=" + passengerId +
-                    ", survived=" + survived +
-                    ", pClass=" + pClass +
-                    ", name='" + name + '\'' +
-                    ", isMale=" + isMale +
-                    ", age=" + age +
-                    ", sibSp=" + sibSp +
-                    ", parch=" + parch +
-                    ", ticket='" + ticket + '\'' +
-                    ", fare=" + fare +
-                    ", cabin='" + cabin + '\'' +
-                    ", embarked=" + embarked +
-                    '}';
+            return
+                    "\npassengerId = " + passengerId +
+                    " name = " + name;
         }
     }
