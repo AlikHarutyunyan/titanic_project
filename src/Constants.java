@@ -10,4 +10,5 @@ public class Constants {
     public static final int COMBO_BOX_WIDTH = 80;
     public static final int COMBO_BOX_HEIGHT = 30;
 
+
 }

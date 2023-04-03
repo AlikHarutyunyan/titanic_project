@@ -1,5 +1,11 @@
 import javax.swing.*;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class ManageScreen extends JPanel {
     private JComboBox<String> survivedComboBox;
@@ -7,6 +13,7 @@ public class ManageScreen extends JPanel {
     public ManageScreen(int x, int y, int width, int height) {
         File file = new File(Constants.PATH_TO_DATA_FILE); //this is the path to the data file
         if (file.exists()) {
+            List<Passenger> allPassengers = readData(file);
             this.setLayout(null);
             this.setBounds(x, y + Constants.MARGIN_FROM_TOP, width, height);
             JLabel survivedLabel = new JLabel("Passenger Class: ");
@@ -19,6 +26,36 @@ public class ManageScreen extends JPanel {
                 //do whatever you want on change
             });
         }
+    }
+
+    public static List<Passenger> readData (File file) {
+        List<Passenger> result = new ArrayList<>();
+        try {
+            FileReader filereader = new FileReader(file);
+            BufferedReader bufferedReader = new BufferedReader(filereader);
+            String line = null;
+            while (true) {
+                line = bufferedReader.readLine();
+                if (line == null) {
+                    break;
+                }
+                Passenger newPassenger = createPassenger(line);
+                if (newPassenger != null) {
+                    result.add(newPassenger);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    private static Passenger createPassenger (String line) {
+        Passenger passenger = null;
+        if (Passenger.lineValidation(line)) {
+            passenger = new Passenger(line);
+        }
+        return passenger;
     }
 
 }
