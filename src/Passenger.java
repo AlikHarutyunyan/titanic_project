@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 
     public class Passenger {
-        private int passengerLd;
+        private int passengerId;
         private boolean survived;
         private int pClass;
         private String name;
@@ -55,14 +55,18 @@ import java.util.List;
 
         public Passenger (String line) {
             String[] dataItems = line.split(",");
+            this.passengerId = Integer.parseInt(dataItems[Constants.PASSENGER_ID]);
+            this.survived = dataItems[Constants.SURVIVED].equals("1");
+            this.pClass = Integer.parseInt(dataItems[Constants.P_CLASS]);
+            this.name = this.getFormattedName(dataItems[Constants.LAST_NAME],dataItems[Constants.FIRST_NAME]);
 
         }
 
 
 
-        //private String getFormattedName(String firstPart, String secondPart) {
+        private String getFormattedName(String lastName, String firstName) {
 
-
-        //}
+        return null;
+        }
 
     }

@@ -13,8 +13,8 @@ public class Constants {
     public static final int PASSENGER_ID = 0;
     public static final int SURVIVED = 1;
     public static final int P_CLASS = 2;
-    public static final int FIRST_NAME = 3;
-    public static final int LAST_NAME = 4;
+    public static final int FIRST_NAME = 4;
+    public static final int LAST_NAME = 3;
     public static final int SEX = 5;
     public static final int AGE = 6;
     public static final int SIB_SP = 7;
