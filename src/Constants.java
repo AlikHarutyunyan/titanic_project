@@ -28,5 +28,7 @@ public class Constants {
 
     public static final int PASSENGER_NAME_FIELD_WIDTH = 160;
 
+    public static final String[] PASSENGER_SEX_OPTIONS = { "All", "Female", "Male"};
 
+    public static final int SIB_SP_PASSENGER_LABEL_WIDTH = 200;
 }

@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -12,6 +13,8 @@ public class ManageScreen extends JPanel {
     private JTextField minPassengerIdField;
     private JTextField maxPassengerIdField;
     private JTextField passengerNameField;
+
+    private JComboBox<String> sexOfPassengerComboBox;
 
     public ManageScreen(int x, int y, int width, int height) {
         File file = new File(Constants.PATH_TO_DATA_FILE); //this is the path to the data file
@@ -54,6 +57,17 @@ public class ManageScreen extends JPanel {
             this.passengerNameField.setBounds(minPassengerIdLabel.getX() + passengerNameLabel.getWidth() + 1, passengerNameLabel.getY(), Constants.PASSENGER_NAME_FIELD_WIDTH, Constants.COMBO_BOX_HEIGHT);
             this.add(this.passengerNameField);
 
+            JLabel sexOfPassengerLabel = new JLabel("Sex of Passenger: ");
+            sexOfPassengerLabel.setBounds(minPassengerIdLabel.getX() , this.passengerNameField.getY() + Constants.COMBO_BOX_HEIGHT + Constants.MARGIN_FROM_TOP , sexOfPassengerLabel.getPreferredSize().width, Constants.LABEL_HEIGHT);
+            this.add(sexOfPassengerLabel);
+
+            this.sexOfPassengerComboBox = new JComboBox<>(Constants.PASSENGER_SEX_OPTIONS);
+            this.sexOfPassengerComboBox.setBounds(minPassengerIdLabel.getX() + sexOfPassengerLabel.getWidth() + 1, sexOfPassengerLabel.getY() , Constants.COMBO_BOX_WIDTH , Constants.COMBO_BOX_HEIGHT);
+            this.add(sexOfPassengerComboBox);
+
+            JLabel sibSpPassengerLabel = new JLabel("Siblings or Spouses Count: ");
+            sibSpPassengerLabel.setBounds(minPassengerIdLabel.getX(), this.sexOfPassengerComboBox.getY() + sexOfPassengerComboBox.getHeight() + Constants.MARGIN_FROM_TOP , Constants.SIB_SP_PASSENGER_LABEL_WIDTH, Constants.LABEL_HEIGHT);
+            this.add(sibSpPassengerLabel);
 
 
             this.pClassComboBox.addActionListener((e) -> {
