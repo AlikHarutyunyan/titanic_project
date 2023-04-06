@@ -30,5 +30,11 @@ public class Constants {
 
     public static final String[] PASSENGER_SEX_OPTIONS = { "All", "Female", "Male"};
 
-    public static final int SIB_SP_PASSENGER_LABEL_WIDTH = 200;
+    public static final int SIB_SP_PASSENGER_LABEL_WIDTH = 155;
+
+    public static final int PASSENGER_TICKET_FIELD_WIDTH = 100;
+
+    public static final int LABEL_PADDING_RIGHT = 5;
+
+    public static final String[] PASSENGER_EMBARKED_OPTIONS = { "All", "S", "Q","C"};
 }
