@@ -24,7 +24,9 @@ public class Constants {
     public static final int CABIN = 11;
     public static final int EMBARKED = 12;
 
+    public static final int TEXT_FIELD_WIDTH = 40;
 
+    public static final int PASSENGER_NAME_FIELD_WIDTH = 160;
 
 
 }

@@ -4,33 +4,66 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 public class ManageScreen extends JPanel {
-    private JComboBox<String> survivedComboBox;
+    private JComboBox<String> pClassComboBox;
+    private JTextField minPassengerIdField;
+    private JTextField maxPassengerIdField;
+    private JTextField passengerNameField;
 
     public ManageScreen(int x, int y, int width, int height) {
         File file = new File(Constants.PATH_TO_DATA_FILE); //this is the path to the data file
         if (file.exists()) {
-            List<Passenger> allPassengers = readData(file);
+            List<Passenger> allPassengers = removePotentialDuplicates(readData(file));
             System.out.println(allPassengers);
             this.setLayout(null);
             this.setBounds(x, y + Constants.MARGIN_FROM_TOP, width, height);
-            JLabel survivedLabel = new JLabel("Passenger Class: ");
-            survivedLabel.setBounds(x + Constants.MARGIN_FROM_LEFT, y, Constants.LABEL_WIDTH, Constants.LABEL_HEIGHT);
-            this.add(survivedLabel);
-            this.survivedComboBox = new JComboBox<>(Constants.PASSENGER_CLASS_OPTIONS);
-            this.survivedComboBox.setBounds(survivedLabel.getX() + survivedLabel.getWidth() + 1, survivedLabel.getY(), Constants.COMBO_BOX_WIDTH, Constants.COMBO_BOX_HEIGHT);
-            this.add(this.survivedComboBox);
-            this.survivedComboBox.addActionListener((e) -> {
+
+            JLabel pClassLabel = new JLabel("Passenger Class: ");
+            pClassLabel.setBounds(x + Constants.MARGIN_FROM_LEFT, y, pClassLabel.getPreferredSize().width, Constants.LABEL_HEIGHT);
+            this.add(pClassLabel);
+
+            this.pClassComboBox = new JComboBox<>(Constants.PASSENGER_CLASS_OPTIONS);
+            this.pClassComboBox.setBounds(pClassLabel.getX() + pClassLabel.getWidth() + 1, pClassLabel.getY(), Constants.COMBO_BOX_WIDTH, Constants.COMBO_BOX_HEIGHT);
+            this.add(this.pClassComboBox);
+
+            JLabel minPassengerIdLabel = new JLabel("Minimum Passenger ID: ");
+            minPassengerIdLabel.setBounds(x + Constants.MARGIN_FROM_LEFT, this.pClassComboBox.getY() + Constants.MARGIN_FROM_TOP + this.pClassComboBox.getHeight(),
+                    minPassengerIdLabel.getPreferredSize().width, Constants.LABEL_HEIGHT);
+            this.add(minPassengerIdLabel);
+
+            this.minPassengerIdField = new JTextField();
+            this.minPassengerIdField.setBounds(minPassengerIdLabel.getX() + minPassengerIdLabel.getWidth() + 1, minPassengerIdLabel.getY(), Constants.TEXT_FIELD_WIDTH, Constants.COMBO_BOX_HEIGHT);
+            this.add(minPassengerIdField);
+
+            JLabel maxPassengerIdLabel = new JLabel("Maximum Passenger ID: ");
+            maxPassengerIdLabel.setBounds(this.minPassengerIdField.getX() + this.minPassengerIdField.getWidth() + Constants.MARGIN_FROM_LEFT, minPassengerIdLabel.getY(), maxPassengerIdLabel.getPreferredSize().width, Constants.LABEL_HEIGHT);
+            this.add(maxPassengerIdLabel);
+
+            this.maxPassengerIdField = new JTextField();
+            this.maxPassengerIdField.setBounds(maxPassengerIdLabel.getX() + maxPassengerIdLabel.getWidth() + 1, maxPassengerIdLabel.getY(), Constants.TEXT_FIELD_WIDTH, Constants.COMBO_BOX_HEIGHT);
+            this.add(this.maxPassengerIdField);
+
+            JLabel passengerNameLabel = new JLabel("Passenger Name: ");
+            passengerNameLabel.setBounds(minPassengerIdLabel.getX(), this.minPassengerIdField.getY() + this.minPassengerIdField.getHeight() + Constants.MARGIN_FROM_TOP, passengerNameLabel.getPreferredSize().width, Constants.LABEL_HEIGHT);
+            this.add(passengerNameLabel);
+
+            this.passengerNameField = new JTextField();
+            this.passengerNameField.setBounds(minPassengerIdLabel.getX() + passengerNameLabel.getWidth() + 1, passengerNameLabel.getY(), Constants.PASSENGER_NAME_FIELD_WIDTH, Constants.COMBO_BOX_HEIGHT);
+            this.add(this.passengerNameField);
+
+
+
+            this.pClassComboBox.addActionListener((e) -> {
                 //do whatever you want on change
             });
         }
     }
 
-    public static List<Passenger> readData (File file) {
-        List<Passenger> result = new ArrayList<>();
+    public static ArrayList<Passenger> readData (File file) {
+        ArrayList<Passenger> result = new ArrayList<>();
         try {
             FileReader filereader = new FileReader(file);
             BufferedReader bufferedReader = new BufferedReader(filereader);
@@ -57,6 +90,17 @@ public class ManageScreen extends JPanel {
             passenger = new Passenger(line);
         }
         return passenger;
+    }
+
+    private ArrayList<Passenger> removePotentialDuplicates (ArrayList<Passenger> passengers) {
+        ArrayList<Passenger> result = new ArrayList<>();
+        HashSet<Integer> ids = new HashSet<>();
+        for (Passenger passenger : passengers) {
+            if (ids.add(passenger.getPassengerId())) {
+                result.add(passenger);
+            }
+        }
+        return result;
     }
 
 }

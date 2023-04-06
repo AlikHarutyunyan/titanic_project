@@ -88,7 +88,8 @@ import java.util.List;
 
         private String getFormattedName(String lastName, String firstName) {
             firstName = firstName.substring(firstName.indexOf('.')+1).trim();
-            String fullName = firstName + " " + lastName;
+            String fullName = firstName.substring(0,firstName.length()-1) + " " + lastName.substring(1);
+            fullName = fullName.replace("\"\"", "\"");
             return fullName;
         }
 
@@ -97,5 +98,9 @@ import java.util.List;
             return
                     "\npassengerId = " + passengerId +
                     " name = " + name;
+        }
+
+        public int getPassengerId() {
+            return passengerId;
         }
     }
