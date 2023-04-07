@@ -18,14 +18,15 @@ public class ManageScreen extends JPanel {
     private JTextField maxPassengerTicketFareField;
     private JTextField passengerTicketField;
     private JTextField passengerCabinField;
-    private JComboBox<String> passengerEmbarkedField;
+    private JComboBox<String> passengerEmbarkedComboBox;
     private JComboBox<String> sexOfPassengerComboBox;
     private JButton sync;
+    private List<Passenger> allPassengers;
 
     public ManageScreen(int x, int y, int width, int height) {
         File file = new File(Constants.PATH_TO_DATA_FILE); //this is the path to the data file
         if (file.exists()) {
-            List<Passenger> allPassengers = removePotentialDuplicates(readData(file));
+            this.allPassengers = removePotentialDuplicates(readData(file));
             System.out.println(allPassengers);
             this.setLayout(null);
             this.setBounds(x, y + Constants.MARGIN_FROM_TOP, width, height);
@@ -64,15 +65,15 @@ public class ManageScreen extends JPanel {
             this.add(this.passengerNameField);
 
             JLabel sexOfPassengerLabel = new JLabel("Sex of Passenger: ");
-            sexOfPassengerLabel.setBounds(minPassengerIdLabel.getX() , this.passengerNameField.getY() + Constants.COMBO_BOX_HEIGHT + Constants.MARGIN_FROM_TOP , sexOfPassengerLabel.getPreferredSize().width + Constants.LABEL_PADDING_RIGHT, Constants.LABEL_HEIGHT);
+            sexOfPassengerLabel.setBounds(minPassengerIdLabel.getX(), this.passengerNameField.getY() + Constants.COMBO_BOX_HEIGHT + Constants.MARGIN_FROM_TOP, sexOfPassengerLabel.getPreferredSize().width + Constants.LABEL_PADDING_RIGHT, Constants.LABEL_HEIGHT);
             this.add(sexOfPassengerLabel);
 
             this.sexOfPassengerComboBox = new JComboBox<>(Constants.PASSENGER_SEX_OPTIONS);
-            this.sexOfPassengerComboBox.setBounds(minPassengerIdLabel.getX() + sexOfPassengerLabel.getWidth() + 1, sexOfPassengerLabel.getY() , Constants.COMBO_BOX_WIDTH , Constants.COMBO_BOX_HEIGHT);
+            this.sexOfPassengerComboBox.setBounds(minPassengerIdLabel.getX() + sexOfPassengerLabel.getWidth() + 1, sexOfPassengerLabel.getY(), Constants.COMBO_BOX_WIDTH, Constants.COMBO_BOX_HEIGHT);
             this.add(sexOfPassengerComboBox);
 
             JLabel sibSpPassengerLabel = new JLabel("Siblings or Spouses Count: ");
-            sibSpPassengerLabel.setBounds(minPassengerIdLabel.getX(), this.sexOfPassengerComboBox.getY() + sexOfPassengerComboBox.getHeight() + Constants.MARGIN_FROM_TOP , sibSpPassengerLabel.getPreferredSize().width + Constants.LABEL_PADDING_RIGHT, Constants.LABEL_HEIGHT);
+            sibSpPassengerLabel.setBounds(minPassengerIdLabel.getX(), this.sexOfPassengerComboBox.getY() + sexOfPassengerComboBox.getHeight() + Constants.MARGIN_FROM_TOP, sibSpPassengerLabel.getPreferredSize().width + Constants.LABEL_PADDING_RIGHT, Constants.LABEL_HEIGHT);
             this.add(sibSpPassengerLabel);
 
             this.sibSpPassengerField = new JTextField();
@@ -80,7 +81,7 @@ public class ManageScreen extends JPanel {
             this.add(sibSpPassengerField);
 
             JLabel parchPassengerLabel = new JLabel("Passenger Parch: ");
-            parchPassengerLabel.setBounds(minPassengerIdLabel.getX(), sibSpPassengerField.getY() + sibSpPassengerField.getHeight() + Constants.MARGIN_FROM_TOP, parchPassengerLabel.getPreferredSize().width + Constants.LABEL_PADDING_RIGHT ,Constants.LABEL_HEIGHT);
+            parchPassengerLabel.setBounds(minPassengerIdLabel.getX(), sibSpPassengerField.getY() + sibSpPassengerField.getHeight() + Constants.MARGIN_FROM_TOP, parchPassengerLabel.getPreferredSize().width + Constants.LABEL_PADDING_RIGHT, Constants.LABEL_HEIGHT);
             this.add(parchPassengerLabel);
 
             this.passengerParchField = new JTextField();
@@ -100,7 +101,7 @@ public class ManageScreen extends JPanel {
             this.add(maxPassengerTicketFareLabel);
 
             this.maxPassengerTicketFareField = new JTextField();
-            this.maxPassengerTicketFareField.setBounds( maxPassengerTicketFareLabel.getX() + maxPassengerTicketFareLabel.getWidth() + 1, maxPassengerTicketFareLabel.getY(), Constants.TEXT_FIELD_WIDTH, Constants.COMBO_BOX_HEIGHT);
+            this.maxPassengerTicketFareField.setBounds(maxPassengerTicketFareLabel.getX() + maxPassengerTicketFareLabel.getWidth() + 1, maxPassengerTicketFareLabel.getY(), Constants.TEXT_FIELD_WIDTH, Constants.COMBO_BOX_HEIGHT);
             this.add(maxPassengerTicketFareField);
 
             JLabel passengerTicketLabel = new JLabel("Passenger Ticket Number: ");
@@ -116,31 +117,118 @@ public class ManageScreen extends JPanel {
             this.add(passengerCabinLabel);
 
             this.passengerCabinField = new JTextField();
-            this.passengerCabinField.setBounds(passengerCabinLabel.getX() + passengerCabinLabel.getWidth() + 1,passengerCabinLabel.getY(), Constants.TEXT_FIELD_WIDTH, Constants.COMBO_BOX_HEIGHT);
+            this.passengerCabinField.setBounds(passengerCabinLabel.getX() + passengerCabinLabel.getWidth() + 1, passengerCabinLabel.getY(), Constants.TEXT_FIELD_WIDTH, Constants.COMBO_BOX_HEIGHT);
             this.add(passengerCabinField);
 
             JLabel passengerEmbarkedLabel = new JLabel("Passenger Embarked: ");
             passengerEmbarkedLabel.setBounds(minPassengerIdLabel.getX(), passengerCabinField.getY() + passengerCabinField.getHeight() + Constants.MARGIN_FROM_TOP, passengerEmbarkedLabel.getPreferredSize().width + Constants.LABEL_PADDING_RIGHT, Constants.LABEL_HEIGHT);
             this.add(passengerEmbarkedLabel);
 
-            this.passengerEmbarkedField = new JComboBox<>(Constants.PASSENGER_EMBARKED_OPTIONS);
-            this.passengerEmbarkedField.setBounds(minPassengerIdLabel.getX() + passengerEmbarkedLabel.getWidth() + 1, passengerEmbarkedLabel.getY(), Constants.COMBO_BOX_WIDTH, Constants.COMBO_BOX_HEIGHT);
-            this.add(passengerEmbarkedField);
+            this.passengerEmbarkedComboBox = new JComboBox<>(Constants.PASSENGER_EMBARKED_OPTIONS);
+            this.passengerEmbarkedComboBox.setBounds(minPassengerIdLabel.getX() + passengerEmbarkedLabel.getWidth() + 1, passengerEmbarkedLabel.getY(), Constants.COMBO_BOX_WIDTH, Constants.COMBO_BOX_HEIGHT);
+            this.add(passengerEmbarkedComboBox);
 
 
             this.sync = new JButton("Synchronize");
             int buttonWidth = sync.getPreferredSize().width + Constants.LABEL_PADDING_RIGHT;
-            this.sync.setBounds((this.getWidth()-buttonWidth)/2, passengerEmbarkedField.getY() + passengerEmbarkedField.getHeight() + Constants.MARGIN_FROM_TOP, buttonWidth, Constants.COMBO_BOX_HEIGHT);
+            this.sync.setBounds((this.getWidth() - buttonWidth) / 2, passengerEmbarkedComboBox.getY() + passengerEmbarkedComboBox.getHeight() + Constants.MARGIN_FROM_TOP, buttonWidth, Constants.COMBO_BOX_HEIGHT);
             this.add(sync);
 
             this.sync.addActionListener((e) -> {
-                System.out.println(pClassComboBox.getSelectedItem());
-                System.out.println(minPassengerIdField.getText());
+
+
+                String minPassengerId = minPassengerIdField.getText().trim();
+                String maxPassengerId = maxPassengerIdField.getText().trim();
+                String pClass = (String) pClassComboBox.getSelectedItem();
+                String passengerName = passengerNameField.getText().trim();
+                String sexOfPassenger = (String) sexOfPassengerComboBox.getSelectedItem();
+                String sibSpPassenger = sibSpPassengerField.getText().trim();
+                String parchPassenger = passengerParchField.getText().trim();
+                String passengerTicket = passengerTicketField.getText().trim();
+                String minPassengerTicketFare = minPassengerTicketFareField.getText().trim();
+                String maxPassengerTicketFare = maxPassengerTicketFareField.getText().trim();
+                String passengerCabin = passengerCabinField.getText().trim();
+                String passengerEmbarked = (String) passengerEmbarkedComboBox.getSelectedItem();
+
+
+               if (dataValidation(minPassengerId, maxPassengerId, sibSpPassenger, parchPassenger, minPassengerTicketFare, maxPassengerTicketFare)){
+                   System.out.println("Validation Completed");
+               } else{
+                   System.out.println("You Put Incorrect Values");
+               }
+
             });
         }
     }
 
-    public static ArrayList<Passenger> readData (File file) {
+    private boolean dataValidation(String minPassengerId, String maxPassengerId, String sibSpPassenger, String parchPassenger, String minPassengerTicketFare, String maxPassengerTicketFare) {
+        boolean result = false;
+        if (isIntegerOrEmpty(sibSpPassenger) && (isIntegerOrEmpty(parchPassenger))) {
+            if (isIntegerOrEmpty(minPassengerId) && isIntegerOrEmpty(maxPassengerId)) {
+
+                if (isDoubleOrEmpty(minPassengerTicketFare) && isDoubleOrEmpty(maxPassengerTicketFare)) {
+                    if (!minPassengerTicketFare.equals("") && !maxPassengerTicketFare.equals("")){
+                        result = minMaxValidation(minPassengerTicketFare, maxPassengerTicketFare);
+                    } else{
+                        result = true;
+                    }
+                    if (result && !minPassengerId.equals("") && Integer.parseInt(minPassengerId) < this.allPassengers.size()){
+                        if (!maxPassengerId.equals("")){
+                            result = minMaxValidation(minPassengerId, maxPassengerId);
+                        }
+                    }else{
+                        result = false;
+                    }
+
+                }
+            }
+        }
+        return result;
+    }
+
+    private boolean minMaxValidation (String min, String max){
+        boolean result = false;
+        try{
+            result = Double.parseDouble(max) > Double.parseDouble(min);
+        }
+        catch(Exception e){
+            System.out.println("Something Went Wrong");
+        }
+        return result;
+    }
+
+
+
+    private boolean isIntegerOrEmpty(String num){
+        boolean result = true;
+            if (!num.equals("")){
+                try{
+                    Integer.parseInt(num);
+                }
+                catch(Exception e){
+                    result = false;
+                }
+            }
+            return result;
+    }
+
+
+    private boolean isDoubleOrEmpty(String num){
+        boolean result = true;
+        if (!num.equals("")){
+            try{
+                Double.parseDouble(num);
+            }
+            catch(Exception e){
+                result = false;
+            }
+        }
+        return result;
+    }
+
+
+
+    public ArrayList<Passenger> readData (File file) {
         ArrayList<Passenger> result = new ArrayList<>();
         try {
             FileReader filereader = new FileReader(file);
