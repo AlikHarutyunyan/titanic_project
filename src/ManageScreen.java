@@ -135,35 +135,32 @@ public class ManageScreen extends JPanel {
             this.add(sync);
 
             this.sync.addActionListener((e) -> {
-
-
-                String minPassengerId = minPassengerIdField.getText().trim();
-                String maxPassengerId = maxPassengerIdField.getText().trim();
-                String pClass = (String) pClassComboBox.getSelectedItem();
-                String passengerName = passengerNameField.getText().trim();
-                String sexOfPassenger = (String) sexOfPassengerComboBox.getSelectedItem();
-                String sibSpPassenger = sibSpPassengerField.getText().trim();
-                String parchPassenger = passengerParchField.getText().trim();
-                String passengerTicket = passengerTicketField.getText().trim();
-                String minPassengerTicketFare = minPassengerTicketFareField.getText().trim();
-                String maxPassengerTicketFare = maxPassengerTicketFareField.getText().trim();
-                String passengerCabin = passengerCabinField.getText().trim();
-                String passengerEmbarked = (String) passengerEmbarkedComboBox.getSelectedItem();
+                String minPassengerId = this.minPassengerIdField.getText().trim();
+                String maxPassengerId = this.maxPassengerIdField.getText().trim();
+                String pClass = (String) this.pClassComboBox.getSelectedItem();
+                String passengerName = this.passengerNameField.getText().trim();
+                String sexOfPassenger = (String) this.sexOfPassengerComboBox.getSelectedItem();
+                String sibSpPassenger = this.sibSpPassengerField.getText().trim();
+                String parchPassenger = this.passengerParchField.getText().trim();
+                String passengerTicket = this.passengerTicketField.getText().trim();
+                String minPassengerTicketFare = this.minPassengerTicketFareField.getText().trim();
+                String maxPassengerTicketFare = this.maxPassengerTicketFareField.getText().trim();
+                String passengerCabin = this.passengerCabinField.getText().trim();
+                String passengerEmbarked = (String) this.passengerEmbarkedComboBox.getSelectedItem();
 
 
                if (dataValidation(minPassengerId, maxPassengerId, sibSpPassenger, parchPassenger, minPassengerTicketFare, maxPassengerTicketFare)){
                    int min = 0;
                    int max = this.allPassengers.size();
-
                    if(!minPassengerId.equals("") && Integer.parseInt(minPassengerId)>0){
                        min = Integer.parseInt(minPassengerId)-1;
                    }
                    if(!maxPassengerId.equals("") && Integer.parseInt(maxPassengerId) < this.allPassengers.size()){
                        max = Integer.parseInt(maxPassengerId);
                    }
-                   ArrayList<Passenger> searchResult = this.performSearch(this.allPassengers.subList(min,max),sibSpPassenger,parchPassenger,
-                           minPassengerTicketFare,maxPassengerTicketFare,pClass,passengerName,sexOfPassenger,passengerTicket,passengerCabin,passengerEmbarked);
-                   System.out.println(searchResult);
+                       ArrayList<Passenger> searchResult = this.performSearch(this.allPassengers.subList(min, max), sibSpPassenger, parchPassenger,
+                               minPassengerTicketFare, maxPassengerTicketFare, pClass, passengerName, sexOfPassenger, passengerTicket, passengerCabin, passengerEmbarked);
+                       System.out.println(searchResult);
                } else{
                    System.out.println("You Put Incorrect Values");
                }
@@ -174,13 +171,13 @@ public class ManageScreen extends JPanel {
 
     private ArrayList<Passenger> performSearch(List<Passenger> subList, String sibSpPassenger, String parchPassenger, String minPassengerTicketFare, String maxPassengerTicketFare, String pClass, String passengerName, String sexOfPassenger, String passengerTicket, String passengerCabin, String passengerEmbarked) {
         ArrayList<Passenger> result = new ArrayList<>();
-        if (pClass.equals("All")) {
+        if (pClass != null && pClass.equals("All")) {
             pClass = "";
         }
-        if (sexOfPassenger.equals("All")) {
+        if (sexOfPassenger != null && sexOfPassenger.equals("All")) {
             sexOfPassenger = "";
         }
-        if (passengerEmbarked.equals("All")) {
+        if (passengerEmbarked != null && passengerEmbarked.equals("All")) {
             passengerEmbarked = "";
         }
         for (Passenger passenger : subList) {
@@ -266,7 +263,7 @@ public class ManageScreen extends JPanel {
         try {
             FileReader filereader = new FileReader(file);
             BufferedReader bufferedReader = new BufferedReader(filereader);
-            String line = null;
+            String line;
             while (true) {
                 line = bufferedReader.readLine();
                 if (line == null) {

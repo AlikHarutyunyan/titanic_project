@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.List;
-
-    public class Passenger {
+ public class Passenger {
         private int passengerId;
         private boolean survived;
         private int pClass;
