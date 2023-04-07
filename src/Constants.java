@@ -37,4 +37,8 @@ public class Constants {
     public static final int LABEL_PADDING_RIGHT = 5;
 
     public static final String[] PASSENGER_EMBARKED_OPTIONS = { "All", "S", "Q","C"};
+
+    public static final String CURRENT_NUMBER_FILE = "src/data/currentNumber.txt";
+
+    public static final String DATA_PATH = "src/data/";
 }

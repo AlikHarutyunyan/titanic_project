@@ -90,14 +90,24 @@
             return fullName;
         }
 
-        @Override
-        public String toString() {
-            return
-                    "\npassengerId = " + passengerId +
-                    " name = " + name;
-        }
+     @Override
+     public String toString() {
+         String outPut = this.passengerId + ",";
+         outPut += (this.survived)? "1,": "0,";
+         outPut += this.pClass + ",";
+         outPut += this.name + ",";
+         outPut += (this.isMale)? "male,": "female,";
+         if (this.age==null) {
+             outPut += ",";
+         } else {
+             outPut += this.age + ",";
+         }
+         outPut += this.sibSp + "," + this.parch + "," + this.ticket + ",";
+         outPut += this.fare + "," + this.cabin + "," + this.embarked;
+         return outPut;
+     }
 
-        public int getPassengerId() {
+     public int getPassengerId() {
             return passengerId;
         }
 
@@ -166,4 +176,8 @@
             }
             return result;
         }
-    }
+
+     public boolean isSurvived() {
+         return survived;
+     }
+ }

@@ -1,8 +1,5 @@
 import javax.swing.*;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -134,6 +131,12 @@ public class ManageScreen extends JPanel {
             this.sync.setBounds((this.getWidth() - buttonWidth) / 2, passengerEmbarkedComboBox.getY() + passengerEmbarkedComboBox.getHeight() + Constants.MARGIN_FROM_TOP, buttonWidth, Constants.COMBO_BOX_HEIGHT);
             this.add(sync);
 
+            JLabel searchResultLabel = new JLabel("Total passengers: XXX (XXX survived, XXX did not)");
+            int searchResultLabelWidth = searchResultLabel.getPreferredSize().width + Constants.LABEL_PADDING_RIGHT;
+            searchResultLabel.setBounds((this.getWidth() - searchResultLabelWidth)/2,sync.getY() + sync.getHeight(), searchResultLabelWidth, Constants.LABEL_HEIGHT);
+            searchResultLabel.setVisible(false);
+            this.add(searchResultLabel);
+
             this.sync.addActionListener((e) -> {
                 String minPassengerId = this.minPassengerIdField.getText().trim();
                 String maxPassengerId = this.maxPassengerIdField.getText().trim();
@@ -161,6 +164,11 @@ public class ManageScreen extends JPanel {
                        ArrayList<Passenger> searchResult = this.performSearch(this.allPassengers.subList(min, max), sibSpPassenger, parchPassenger,
                                minPassengerTicketFare, maxPassengerTicketFare, pClass, passengerName, sexOfPassenger, passengerTicket, passengerCabin, passengerEmbarked);
                        System.out.println(searchResult);
+                       int countSurvived = this.countSurvived(searchResult);
+                       searchResultLabel.setText("Total passengers: " + searchResult.size() + " (" + countSurvived + " survived, " + (searchResult.size()-countSurvived) + " did not)");
+                       searchResultLabel.setVisible(true);
+                       this.createFile(searchResult);
+
                } else{
                    System.out.println("You Put Incorrect Values");
                }
@@ -168,6 +176,65 @@ public class ManageScreen extends JPanel {
             });
         }
     }
+
+    private void createFile (ArrayList<Passenger> searchList) {
+        //TODO SORT THE ARRAY LIST BY NAME IF NECESSARY (CHECK LATER)
+            File file = new File(Constants.CURRENT_NUMBER_FILE);
+            boolean success = false;
+            if (!file.exists()) {
+                try {
+                    success = file.createNewFile() && writeToFile(file, "1");
+                } catch (Exception g) {
+                    System.out.println("Error creating the file: " + g.getMessage());
+                }
+            }
+
+            try {
+                BufferedReader bufferedReader = new BufferedReader(new FileReader(Constants.CURRENT_NUMBER_FILE));
+                String name = bufferedReader.readLine();
+                File newFile = new File(Constants.DATA_PATH + name + ".csv");
+                newFile.createNewFile();
+                writeToFile(newFile,this.createCsvSheet(searchList));
+                writeToFile(file, Integer.parseInt(name)+1 + "");
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+    }
+
+    private boolean writeToFile (File file, String text) {
+        boolean result = false;
+        try {
+            if (file != null && file.exists()) {
+                FileWriter fileWriter = new FileWriter(file);
+                fileWriter.write(text);
+                fileWriter.close();
+                result = true;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    private String createCsvSheet (ArrayList<Passenger> passengers) {
+        String outPut = "PassengerId,Survived,Pclass,Name,Sex,Age,SibSp,Parch,Ticket,Fare,Cabin,Embarked";
+        for (Passenger passenger: passengers) {
+            outPut += "\n" + passenger.toString();
+        }
+        return outPut;
+    }
+
+    private int countSurvived(ArrayList<Passenger> searchResult) {
+        int result=0;
+        for (Passenger passenger: searchResult) {
+            if(passenger.isSurvived()) {
+                result++;
+            }
+        }
+        return result;
+    }
+
 
     private ArrayList<Passenger> performSearch(List<Passenger> subList, String sibSpPassenger, String parchPassenger, String minPassengerTicketFare, String maxPassengerTicketFare, String pClass, String passengerName, String sexOfPassenger, String passengerTicket, String passengerCabin, String passengerEmbarked) {
         ArrayList<Passenger> result = new ArrayList<>();
@@ -298,5 +365,7 @@ public class ManageScreen extends JPanel {
         }
         return result;
     }
+
+
 
 }
