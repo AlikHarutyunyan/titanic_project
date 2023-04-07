@@ -204,14 +204,13 @@ public class ManageScreen extends JPanel {
                     } else{
                         result = true;
                     }
-                    if (result && !minPassengerId.equals("") && Integer.parseInt(minPassengerId) < this.allPassengers.size()){
-                        if (!maxPassengerId.equals("")){
-                            result = minMaxValidation(minPassengerId, maxPassengerId);
+                    if(result){
+                        if (!minPassengerId.equals("") && Integer.parseInt(minPassengerId) < this.allPassengers.size()){
+                            if (!maxPassengerId.equals("")){
+                                result = minMaxValidation(minPassengerId, maxPassengerId);
+                            }
                         }
-                    }else{
-                        result = false;
                     }
-
                 }
             }
         }

@@ -109,7 +109,7 @@ import java.util.List;
             if (this.matchesFilter(sibSpPassenger, this.sibSp + "") &&
             this.matchesFilter(parchPassenger, this.parch + "") &&
             this.matchesFilter(pClass, this.pClass + "") &&
-            this.matchesFilter(passengerName, this.name) &&
+            this.checkName(passengerName) &&
             this.matchesFilter(passengerCabin, this.cabin) &&
             this.matchesFilter(passengerEmbarked, this.embarked + "") &&
             this.matchesFilter(passengerTicket, this.ticket)) {
@@ -126,15 +126,20 @@ import java.util.List;
             boolean result = false;
             String mySex;
             if (isMale) {
-                mySex = "male";
+                mySex = "Male";
             } else {
-                mySex = "female";
+                mySex = "Female";
             }
             if (filter.equals("") || filter.equals(mySex)) {
                 result = true;
             }
             return result;
         }
+
+        private boolean checkName(String name){
+            return this.name.toLowerCase().contains(name.toLowerCase());
+        }
+
 
         private boolean checkPrice (String min, String max) {
             boolean result = false;
