@@ -152,7 +152,18 @@ public class ManageScreen extends JPanel {
 
 
                if (dataValidation(minPassengerId, maxPassengerId, sibSpPassenger, parchPassenger, minPassengerTicketFare, maxPassengerTicketFare)){
-                   System.out.println("Validation Completed");
+                   int min = 0;
+                   int max = this.allPassengers.size();
+
+                   if(!minPassengerId.equals("") && Integer.parseInt(minPassengerId)>0){
+                       min = Integer.parseInt(minPassengerId)-1;
+                   }
+                   if(!maxPassengerId.equals("") && Integer.parseInt(maxPassengerId) < this.allPassengers.size()){
+                       max = Integer.parseInt(maxPassengerId);
+                   }
+                   ArrayList<Passenger> searchResult = this.performSearch(this.allPassengers.subList(min,max),sibSpPassenger,parchPassenger,
+                           minPassengerTicketFare,maxPassengerTicketFare,pClass,passengerName,sexOfPassenger,passengerTicket,passengerCabin,passengerEmbarked);
+                   System.out.println(searchResult);
                } else{
                    System.out.println("You Put Incorrect Values");
                }
@@ -160,6 +171,27 @@ public class ManageScreen extends JPanel {
             });
         }
     }
+
+    private ArrayList<Passenger> performSearch(List<Passenger> subList, String sibSpPassenger, String parchPassenger, String minPassengerTicketFare, String maxPassengerTicketFare, String pClass, String passengerName, String sexOfPassenger, String passengerTicket, String passengerCabin, String passengerEmbarked) {
+        ArrayList<Passenger> result = new ArrayList<>();
+        if (pClass.equals("All")) {
+            pClass = "";
+        }
+        if (sexOfPassenger.equals("All")) {
+            sexOfPassenger = "";
+        }
+        if (passengerEmbarked.equals("All")) {
+            passengerEmbarked = "";
+        }
+        for (Passenger passenger : subList) {
+            if (passenger.passesFilters(sibSpPassenger, parchPassenger, minPassengerTicketFare, maxPassengerTicketFare, pClass, passengerName, sexOfPassenger, passengerCabin, passengerTicket, passengerEmbarked)) {
+                result.add(passenger);
+            }
+        }
+        return result;
+    }
+
+
 
     private boolean dataValidation(String minPassengerId, String maxPassengerId, String sibSpPassenger, String parchPassenger, String minPassengerTicketFare, String maxPassengerTicketFare) {
         boolean result = false;
@@ -203,7 +235,8 @@ public class ManageScreen extends JPanel {
         boolean result = true;
             if (!num.equals("")){
                 try{
-                    Integer.parseInt(num);
+                    int number = Integer.parseInt(num);
+                    result = number>=0;
                 }
                 catch(Exception e){
                     result = false;
@@ -217,7 +250,8 @@ public class ManageScreen extends JPanel {
         boolean result = true;
         if (!num.equals("")){
             try{
-                Double.parseDouble(num);
+                double number = Double.parseDouble(num);
+                result = number>=0;
             }
             catch(Exception e){
                 result = false;

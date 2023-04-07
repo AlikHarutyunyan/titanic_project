@@ -103,4 +103,65 @@ import java.util.List;
         public int getPassengerId() {
             return passengerId;
         }
+
+        public boolean passesFilters(String sibSpPassenger, String parchPassenger, String minPassengerTicketFare, String maxPassengerTicketFare, String pClass, String passengerName, String sexOfPassenger, String passengerCabin, String passengerTicket, String passengerEmbarked) {
+            boolean result = false;
+            if (this.matchesFilter(sibSpPassenger, this.sibSp + "") &&
+            this.matchesFilter(parchPassenger, this.parch + "") &&
+            this.matchesFilter(pClass, this.pClass + "") &&
+            this.matchesFilter(passengerName, this.name) &&
+            this.matchesFilter(passengerCabin, this.cabin) &&
+            this.matchesFilter(passengerEmbarked, this.embarked + "") &&
+            this.matchesFilter(passengerTicket, this.ticket)) {
+                if (this.checkPrice(minPassengerTicketFare, maxPassengerTicketFare)) {
+                    if (this.checkSex(sexOfPassenger)) {
+                        result = true;
+                    }
+                }
+            }
+            return result;
+        }
+
+        private boolean checkSex (String filter) {
+            boolean result = false;
+            String mySex;
+            if (isMale) {
+                mySex = "male";
+            } else {
+                mySex = "female";
+            }
+            if (filter.equals("") || filter.equals(mySex)) {
+                result = true;
+            }
+            return result;
+        }
+
+        private boolean checkPrice (String min, String max) {
+            boolean result = false;
+            if (min.equals("") && max.equals("")) {
+                result = true;
+            } else {
+                try {
+                    if (!min.equals("")) {
+                        result = this.fare>Double.parseDouble(min);
+                    } else {
+                        result = true;
+                    }
+                    if (result && !max.equals("")) {
+                        result = this.fare<Double.parseDouble(max);
+                    }
+                } catch (Exception e) {
+                    System.out.println("something went wrong");
+                }
+            }
+            return result;
+        }
+
+        private boolean matchesFilter (String filter, String original) {
+            boolean result = false;
+            if (filter.equals("") || filter.equals(original)) {
+                result = true;
+            }
+            return result;
+        }
     }
