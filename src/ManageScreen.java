@@ -227,26 +227,26 @@ public class ManageScreen extends JPanel {
     }
 
     private double[] getSurvivedPercentageBySex (ArrayList<Passenger> allPassengers) {
-        int[] allPassengersBySex = new int[2];
-        int[] survivedPassengersBySex = new int[2];
-        double[] result = new double[2];
+        int[] allPassengersBySex = new int[Constants.TOTAL_SEXES];
+        int[] survivedPassengersBySex = new int[Constants.TOTAL_SEXES];
+        double[] result = new double[Constants.TOTAL_SEXES];
 
         for (Passenger passenger : allPassengers) {
             if (!passenger.isMale()) {
-                allPassengersBySex[0]++;
+                allPassengersBySex[Constants.FEMALE_INDEX]++;
                 if (passenger.isSurvived()) {
-                    survivedPassengersBySex[0]++;
+                    survivedPassengersBySex[Constants.FEMALE_INDEX]++;
                 }
             } else {
-                allPassengersBySex[1]++;
+                allPassengersBySex[Constants.MALE_INDEX]++;
                 if (passenger.isSurvived()) {
-                    survivedPassengersBySex[1]++;
+                    survivedPassengersBySex[Constants.MALE_INDEX]++;
                 }
             }
         }
 
-        result[0] = ((double)survivedPassengersBySex[0]*100.0)/(double)allPassengersBySex[0];
-        result[1] = ((double)survivedPassengersBySex[1]*100.0)/(double)allPassengersBySex[1];
+        result[Constants.FEMALE_INDEX] = ((double)survivedPassengersBySex[Constants.FEMALE_INDEX]*100.0)/(double)allPassengersBySex[Constants.FEMALE_INDEX];
+        result[Constants.MALE_INDEX] = ((double)survivedPassengersBySex[Constants.MALE_INDEX]*100.0)/(double)allPassengersBySex[Constants.MALE_INDEX];
         return result;
     }
 

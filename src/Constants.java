@@ -53,4 +53,11 @@ public class Constants {
     public static final int PCLASS_TWO_INDEX = 1;
 
     public static final int PCLASS_THREE_INDEX = 2;
+
+    public static final int FEMALE_INDEX = 0;
+
+    public static final int MALE_INDEX = 1;
+
+    public static final int TOTAL_SEXES = 2;
+
 }
