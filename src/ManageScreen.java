@@ -219,7 +219,7 @@ public class ManageScreen extends JPanel {
                 "\n Less than 11 pounds - " + survivedPercentageByFair[Constants.FIRST_FARE_RANGE_INDEX] + "%" +
                 "\n 11-30 pounds - " + survivedPercentageByFair[Constants.SECOND_FARE_RANGE_INDEX] + "%" +
                 "\n More than 30 pounds - " + survivedPercentageByFair[Constants.THIRD_FARE_RANGE_INDEX] + "%" +
-                "\n\n Survived percentage by embarked - " +
+                "\n\n Survived percentage by embarked: " +
                 "\n C - " + survivedPercentageByEmbarked[Constants.C_EMBARKED_INDEX] + "%" +
                 "\n Q - " + survivedPercentageByEmbarked[Constants.Q_EMBARKED_INDEX] + "%" +
                 "\n S - " + survivedPercentageByEmbarked[Constants.S_EMBARKED_INDEX] + "%";
