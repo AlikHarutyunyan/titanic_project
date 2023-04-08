@@ -180,4 +180,12 @@
      public boolean isSurvived() {
          return survived;
      }
+
+     public int getpClass() {
+         return pClass;
+     }
+
+     public boolean isMale() {
+         return isMale;
+     }
  }

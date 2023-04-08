@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.io.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -18,7 +19,9 @@ public class ManageScreen extends JPanel {
     private JComboBox<String> passengerEmbarkedComboBox;
     private JComboBox<String> sexOfPassengerComboBox;
     private JButton sync;
-    private List<Passenger> allPassengers;
+
+    private JButton statistics;
+    private ArrayList<Passenger> allPassengers;
 
     public ManageScreen(int x, int y, int width, int height) {
         File file = new File(Constants.PATH_TO_DATA_FILE); //this is the path to the data file
@@ -174,8 +177,80 @@ public class ManageScreen extends JPanel {
                }
 
             });
+
+            this.statistics = new JButton("Create statistics file");
+            int statisticsButtonWidth = statistics.getPreferredSize().width + Constants.LABEL_PADDING_RIGHT;
+            this.statistics.setBounds((this.getWidth() - statisticsButtonWidth)/2, searchResultLabel.getY() + searchResultLabel.getHeight() + Constants.MARGIN_FROM_TOP, statisticsButtonWidth, Constants.COMBO_BOX_HEIGHT);
+            this.add(statistics);
+
+            this.statistics.addActionListener((e) -> {
+                this.statistics.setEnabled(false);
+                double[] survivedPercentageByClass = getSurvivedPercentageByClass(allPassengers);
+                double[] survivedPercentageBySex = getSurvivedPercentageBySex(allPassengers);
+
+
+
+            });
         }
     }
+
+    private double[] getSurvivedPercentageByClass (ArrayList<Passenger> allPassengers) {
+        int[] allPassengersByClass = new int[Constants.PCLASS_THREE];
+        int[] survivedPassengersByClass = new int[Constants.PCLASS_THREE];
+        double[] result = new double[Constants.PCLASS_THREE];
+
+        for (Passenger passenger : allPassengers) {
+            if (passenger.getpClass()==Constants.PCLASS_ONE) {
+                allPassengersByClass[Constants.PCLASS_ONE_INDEX]++;
+                if (passenger.isSurvived()) {
+                    survivedPassengersByClass[Constants.PCLASS_ONE_INDEX]++;
+                }
+            }
+            else if (passenger.getpClass()==Constants.PCLASS_TWO) {
+                allPassengersByClass[Constants.PCLASS_TWO_INDEX]++;
+                if (passenger.isSurvived()) {
+                    survivedPassengersByClass[Constants.PCLASS_TWO_INDEX]++;
+                }
+            }
+            else if (passenger.getpClass()==Constants.PCLASS_THREE) {
+                allPassengersByClass[Constants.PCLASS_THREE_INDEX]++;
+                if (passenger.isSurvived()) {
+                    survivedPassengersByClass[Constants.PCLASS_THREE_INDEX]++;
+                }
+            }
+        }
+
+        result[Constants.PCLASS_ONE_INDEX] = ((double)survivedPassengersByClass[Constants.PCLASS_ONE_INDEX]*100.0)/(double)allPassengersByClass[Constants.PCLASS_ONE_INDEX];
+        result[Constants.PCLASS_TWO_INDEX] = ((double)survivedPassengersByClass[Constants.PCLASS_TWO_INDEX]*100.0/(double)allPassengersByClass[Constants.PCLASS_TWO_INDEX]);
+        result[Constants.PCLASS_THREE_INDEX] = ((double)survivedPassengersByClass[Constants.PCLASS_THREE_INDEX]*100.0/(double)allPassengersByClass[Constants.PCLASS_THREE_INDEX]);
+        return result;
+    }
+
+    private double[] getSurvivedPercentageBySex (ArrayList<Passenger> allPassengers) {
+        int[] allPassengersBySex = new int[2];
+        int[] survivedPassengersBySex = new int[2];
+        double[] result = new double[2];
+
+        for (Passenger passenger : allPassengers) {
+            if (!passenger.isMale()) {
+                allPassengersBySex[0]++;
+                if (passenger.isSurvived()) {
+                    survivedPassengersBySex[0]++;
+                }
+            } else {
+                allPassengersBySex[1]++;
+                if (passenger.isSurvived()) {
+                    survivedPassengersBySex[1]++;
+                }
+            }
+        }
+
+        result[0] = ((double)survivedPassengersBySex[0]*100.0)/(double)allPassengersBySex[0];
+        result[1] = ((double)survivedPassengersBySex[1]*100.0)/(double)allPassengersBySex[1];
+        return result;
+    }
+
+
 
     private void createFile (ArrayList<Passenger> searchList) {
         //TODO SORT THE ARRAY LIST BY NAME IF NECESSARY (CHECK LATER)

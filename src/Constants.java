@@ -41,4 +41,16 @@ public class Constants {
     public static final String CURRENT_NUMBER_FILE = "src/data/currentNumber.txt";
 
     public static final String DATA_PATH = "src/data/";
+
+    public static final int PCLASS_ONE = 1;
+
+    public static final int PCLASS_TWO = 2;
+
+    public static final int PCLASS_THREE = 3;
+
+    public static final int PCLASS_ONE_INDEX = 0;
+
+    public static final int PCLASS_TWO_INDEX = 1;
+
+    public static final int PCLASS_THREE_INDEX = 2;
 }
