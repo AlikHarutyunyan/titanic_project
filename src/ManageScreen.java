@@ -191,9 +191,35 @@ public class ManageScreen extends JPanel {
                 double[] survivedPercentageByFamilyMembers = getSurvivedPercentageByFamilyMembers(allPassengers);
                 double[] survivedPercentageByFair = getSurvivedPercentageByFare(allPassengers);
                 double[] survivedPercentageByEmbarked = getSurvivedPercentageEmbarked(allPassengers);
+                File statisticsFile = createStatisticsFile();
             });
         }
     }
+
+    private String createTxt(double[] survivedPercentageByClass, double[] survivedPercentageBySex, double[] survivedPercentageByAge, double[] survivedPercentageByFamilyMembers, double[] survivedPercentageByFair, double[] survivedPercentageByEmbarked){
+        String output = "Survived percentage by class: " + "\n 1st class - " + survivedPercentageByClass[Constants.PCLASS_ONE_INDEX] + "%" +
+
+
+    }
+
+    private File createStatisticsFile(){
+        boolean success = false;
+        File statsFile = new File(Constants.DATA_PATH + "/statistics.txt");
+        try {
+            if (!statsFile.exists()){
+               success = statsFile.createNewFile();
+               if (!success){
+                   System.out.println("Failed to create file.");
+               }
+            }
+        }
+        catch(IOException e) {
+            System.out.println("An error occurred while creating the file.");
+            e.printStackTrace();
+        }
+        return statsFile;
+    }
+
 
     private double[] getSurvivedPercentageByClass(ArrayList<Passenger> allPassengers) {
         int[] allPassengersByClass = new int[Constants.PCLASS_THREE];
