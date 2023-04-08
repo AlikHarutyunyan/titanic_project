@@ -136,7 +136,7 @@ public class ManageScreen extends JPanel {
 
             JLabel searchResultLabel = new JLabel("Total passengers: XXX (XXX survived, XXX did not)");
             int searchResultLabelWidth = searchResultLabel.getPreferredSize().width + Constants.LABEL_PADDING_RIGHT;
-            searchResultLabel.setBounds((this.getWidth() - searchResultLabelWidth)/2,sync.getY() + sync.getHeight(), searchResultLabelWidth, Constants.LABEL_HEIGHT);
+            searchResultLabel.setBounds((this.getWidth() - searchResultLabelWidth) / 2, sync.getY() + sync.getHeight(), searchResultLabelWidth, Constants.LABEL_HEIGHT);
             searchResultLabel.setVisible(false);
             this.add(searchResultLabel);
 
@@ -155,64 +155,63 @@ public class ManageScreen extends JPanel {
                 String passengerEmbarked = (String) this.passengerEmbarkedComboBox.getSelectedItem();
 
 
-               if (dataValidation(minPassengerId, maxPassengerId, sibSpPassenger, parchPassenger, minPassengerTicketFare, maxPassengerTicketFare)){
-                   int min = 0;
-                   int max = this.allPassengers.size();
-                   if(!minPassengerId.equals("") && Integer.parseInt(minPassengerId)>0){
-                       min = Integer.parseInt(minPassengerId)-1;
-                   }
-                   if(!maxPassengerId.equals("") && Integer.parseInt(maxPassengerId) < this.allPassengers.size()){
-                       max = Integer.parseInt(maxPassengerId);
-                   }
-                       ArrayList<Passenger> searchResult = this.performSearch(this.allPassengers.subList(min, max), sibSpPassenger, parchPassenger,
-                               minPassengerTicketFare, maxPassengerTicketFare, pClass, passengerName, sexOfPassenger, passengerTicket, passengerCabin, passengerEmbarked);
-                       System.out.println(searchResult);
-                       int countSurvived = this.countSurvived(searchResult);
-                       searchResultLabel.setText("Total passengers: " + searchResult.size() + " (" + countSurvived + " survived, " + (searchResult.size()-countSurvived) + " did not)");
-                       searchResultLabel.setVisible(true);
-                       this.createFile(searchResult);
+                if (dataValidation(minPassengerId, maxPassengerId, sibSpPassenger, parchPassenger, minPassengerTicketFare, maxPassengerTicketFare)) {
+                    int min = 0;
+                    int max = this.allPassengers.size();
+                    if (!minPassengerId.equals("") && Integer.parseInt(minPassengerId) > 0) {
+                        min = Integer.parseInt(minPassengerId) - 1;
+                    }
+                    if (!maxPassengerId.equals("") && Integer.parseInt(maxPassengerId) < this.allPassengers.size()) {
+                        max = Integer.parseInt(maxPassengerId);
+                    }
+                    ArrayList<Passenger> searchResult = this.performSearch(this.allPassengers.subList(min, max), sibSpPassenger, parchPassenger,
+                            minPassengerTicketFare, maxPassengerTicketFare, pClass, passengerName, sexOfPassenger, passengerTicket, passengerCabin, passengerEmbarked);
+                    System.out.println(searchResult);
+                    int countSurvived = this.countSurvived(searchResult);
+                    searchResultLabel.setText("Total passengers: " + searchResult.size() + " (" + countSurvived + " survived, " + (searchResult.size() - countSurvived) + " did not)");
+                    searchResultLabel.setVisible(true);
+                    this.createFile(searchResult);
 
-               } else{
-                   System.out.println("You Put Incorrect Values");
-               }
+                } else {
+                    System.out.println("You Put Incorrect Values");
+                }
 
             });
 
             this.statistics = new JButton("Create statistics file");
             int statisticsButtonWidth = statistics.getPreferredSize().width + Constants.LABEL_PADDING_RIGHT;
-            this.statistics.setBounds((this.getWidth() - statisticsButtonWidth)/2, searchResultLabel.getY() + searchResultLabel.getHeight() + Constants.MARGIN_FROM_TOP, statisticsButtonWidth, Constants.COMBO_BOX_HEIGHT);
+            this.statistics.setBounds((this.getWidth() - statisticsButtonWidth) / 2, searchResultLabel.getY() + searchResultLabel.getHeight() + Constants.MARGIN_FROM_TOP, statisticsButtonWidth, Constants.COMBO_BOX_HEIGHT);
             this.add(statistics);
 
             this.statistics.addActionListener((e) -> {
                 this.statistics.setEnabled(false);
                 double[] survivedPercentageByClass = getSurvivedPercentageByClass(allPassengers);
                 double[] survivedPercentageBySex = getSurvivedPercentageBySex(allPassengers);
-
-
-
+                double[] survivedPercentageByAge = getSurvivedPercentageByAge(allPassengers);
+                double[] survivedPercentageByFamilyMembers = getSurvivedPercentageByFamilyMembers(allPassengers);
+                double[] survivedPercentageByFair = getSurvivedPercentageByFare(allPassengers);
+                double[] survivedPercentageByEmbarked = getSurvivedPercentageEmbarked(allPassengers);
             });
         }
     }
 
-    private double[] getSurvivedPercentageByClass (ArrayList<Passenger> allPassengers) {
+    private double[] getSurvivedPercentageByClass(ArrayList<Passenger> allPassengers) {
         int[] allPassengersByClass = new int[Constants.PCLASS_THREE];
         int[] survivedPassengersByClass = new int[Constants.PCLASS_THREE];
         double[] result = new double[Constants.PCLASS_THREE];
 
         for (Passenger passenger : allPassengers) {
-            if (passenger.getpClass()==Constants.PCLASS_ONE) {
+            if (passenger.getpClass() == Constants.PCLASS_ONE) {
                 allPassengersByClass[Constants.PCLASS_ONE_INDEX]++;
                 if (passenger.isSurvived()) {
                     survivedPassengersByClass[Constants.PCLASS_ONE_INDEX]++;
                 }
-            }
-            else if (passenger.getpClass()==Constants.PCLASS_TWO) {
+            } else if (passenger.getpClass() == Constants.PCLASS_TWO) {
                 allPassengersByClass[Constants.PCLASS_TWO_INDEX]++;
                 if (passenger.isSurvived()) {
                     survivedPassengersByClass[Constants.PCLASS_TWO_INDEX]++;
                 }
-            }
-            else if (passenger.getpClass()==Constants.PCLASS_THREE) {
+            } else if (passenger.getpClass() == Constants.PCLASS_THREE) {
                 allPassengersByClass[Constants.PCLASS_THREE_INDEX]++;
                 if (passenger.isSurvived()) {
                     survivedPassengersByClass[Constants.PCLASS_THREE_INDEX]++;
@@ -220,13 +219,13 @@ public class ManageScreen extends JPanel {
             }
         }
 
-        result[Constants.PCLASS_ONE_INDEX] = ((double)survivedPassengersByClass[Constants.PCLASS_ONE_INDEX]*100.0)/(double)allPassengersByClass[Constants.PCLASS_ONE_INDEX];
-        result[Constants.PCLASS_TWO_INDEX] = ((double)survivedPassengersByClass[Constants.PCLASS_TWO_INDEX]*100.0/(double)allPassengersByClass[Constants.PCLASS_TWO_INDEX]);
-        result[Constants.PCLASS_THREE_INDEX] = ((double)survivedPassengersByClass[Constants.PCLASS_THREE_INDEX]*100.0/(double)allPassengersByClass[Constants.PCLASS_THREE_INDEX]);
+        result[Constants.PCLASS_ONE_INDEX] = ((double) survivedPassengersByClass[Constants.PCLASS_ONE_INDEX] * Constants.MAXIMUM_PERCENTAGE) / (double) allPassengersByClass[Constants.PCLASS_ONE_INDEX];
+        result[Constants.PCLASS_TWO_INDEX] = ((double) survivedPassengersByClass[Constants.PCLASS_TWO_INDEX] * Constants.MAXIMUM_PERCENTAGE / (double) allPassengersByClass[Constants.PCLASS_TWO_INDEX]);
+        result[Constants.PCLASS_THREE_INDEX] = ((double) survivedPassengersByClass[Constants.PCLASS_THREE_INDEX] * Constants.MAXIMUM_PERCENTAGE / (double) allPassengersByClass[Constants.PCLASS_THREE_INDEX]);
         return result;
     }
 
-    private double[] getSurvivedPercentageBySex (ArrayList<Passenger> allPassengers) {
+    private double[] getSurvivedPercentageBySex(ArrayList<Passenger> allPassengers) {
         int[] allPassengersBySex = new int[Constants.TOTAL_SEXES];
         int[] survivedPassengersBySex = new int[Constants.TOTAL_SEXES];
         double[] result = new double[Constants.TOTAL_SEXES];
@@ -245,11 +244,118 @@ public class ManageScreen extends JPanel {
             }
         }
 
-        result[Constants.FEMALE_INDEX] = ((double)survivedPassengersBySex[Constants.FEMALE_INDEX]*100.0)/(double)allPassengersBySex[Constants.FEMALE_INDEX];
-        result[Constants.MALE_INDEX] = ((double)survivedPassengersBySex[Constants.MALE_INDEX]*100.0)/(double)allPassengersBySex[Constants.MALE_INDEX];
+        result[Constants.FEMALE_INDEX] = ((double) survivedPassengersBySex[Constants.FEMALE_INDEX] * Constants.MAXIMUM_PERCENTAGE) / (double) allPassengersBySex[Constants.FEMALE_INDEX];
+        result[Constants.MALE_INDEX] = ((double) survivedPassengersBySex[Constants.MALE_INDEX] * Constants.MAXIMUM_PERCENTAGE) / (double) allPassengersBySex[Constants.MALE_INDEX];
         return result;
     }
 
+    private double[] getSurvivedPercentageByAge(ArrayList<Passenger> allPassengers) {
+        int[] allPassengersByAge = new int[Constants.TOTAL_RANGES];
+        int[] survivedPassengersByAge = new int[Constants.TOTAL_RANGES];
+        double[] result = new double[Constants.TOTAL_RANGES];
+        for (Passenger passenger : allPassengers) {
+            boolean b = this.checkAgeInRange(Constants.FIRST_RANGE_MIN, Constants.SECOND_RANGE_MIN, Constants.FIRST_RANGE_INDEX, passenger, allPassengersByAge, survivedPassengersByAge) ||
+                    this.checkAgeInRange(Constants.SECOND_RANGE_MIN, Constants.THIRD_RANGE_MIN, Constants.SECOND_RANGE_INDEX, passenger, allPassengersByAge, survivedPassengersByAge) ||
+                    this.checkAgeInRange(Constants.THIRD_RANGE_MIN, Constants.FOURTH_RANGE_MIN, Constants.THIRD_RANGE_INDEX, passenger, allPassengersByAge, survivedPassengersByAge) ||
+                    this.checkAgeInRange(Constants.FOURTH_RANGE_MIN, Constants.FIFTH_RANGE_MIN, Constants.FOURTH_RANGE_INDEX, passenger, allPassengersByAge, survivedPassengersByAge) ||
+                    this.checkAgeInRange(Constants.FIFTH_RANGE_MIN, Constants.LAST_RANGE_MIN, Constants.FIFTH_RANGE_INDEX, passenger, allPassengersByAge, survivedPassengersByAge) ||
+                    this.checkAgeInRange(Constants.LAST_RANGE_MIN, Integer.MAX_VALUE, Constants.LAST_RANGE_INDEX, passenger, allPassengersByAge, survivedPassengersByAge);
+        }
+        for (int i = 0; i < Constants.TOTAL_RANGES; i++) {
+            result[i] = ((double)survivedPassengersByAge[i]* Constants.MAXIMUM_PERCENTAGE)/(double)allPassengersByAge[i];
+        }
+        return result;
+    }
+
+        private double[] getSurvivedPercentageByFamilyMembers(ArrayList<Passenger> allPassengers){
+            int[] allPassengersByFamilyMembers = new int[Constants.TOTAL_FAMILY_MEMBERS_OPTIONS];
+            int[] survivedPassengersByFamilyMembers = new int[Constants.TOTAL_FAMILY_MEMBERS_OPTIONS];
+            double[] result = new double[Constants.TOTAL_FAMILY_MEMBERS_OPTIONS];
+            for (Passenger passenger : allPassengers) {
+                if (passenger.checkFamilyMember()){
+                    allPassengersByFamilyMembers[Constants.MORE_THAN_ZERO_FAMILY_MEMBERS_INDEX]++;
+                    if (passenger.isSurvived()){
+                        survivedPassengersByFamilyMembers[Constants.MORE_THAN_ZERO_FAMILY_MEMBERS_INDEX]++;
+                    }
+                }else{
+                    allPassengersByFamilyMembers[Constants.ZERO_FAMILY_MEMBERS_INDEX]++;
+                    if (passenger.isSurvived()){
+                        survivedPassengersByFamilyMembers[Constants.ZERO_FAMILY_MEMBERS_INDEX]++;
+                    }
+                }
+            }
+            result[Constants.MORE_THAN_ZERO_FAMILY_MEMBERS_INDEX] = (survivedPassengersByFamilyMembers[Constants.MORE_THAN_ZERO_FAMILY_MEMBERS_INDEX]* Constants.MAXIMUM_PERCENTAGE)/allPassengersByFamilyMembers[Constants.MORE_THAN_ZERO_FAMILY_MEMBERS_INDEX];
+            result[Constants.ZERO_FAMILY_MEMBERS_INDEX] = (survivedPassengersByFamilyMembers[Constants.ZERO_FAMILY_MEMBERS_INDEX]* Constants.MAXIMUM_PERCENTAGE)/allPassengersByFamilyMembers[Constants.ZERO_FAMILY_MEMBERS_INDEX];
+            return result;
+        }
+
+        private double[] getSurvivedPercentageByFare(ArrayList<Passenger> allPassengers){
+            int[] allPassengersByFare = new int[Constants.TOTAL_FARE_RANGES];
+            int[] survivedPassengersByFare = new int[Constants.TOTAL_FARE_RANGES];
+            double[] result = new double[Constants.TOTAL_FARE_RANGES];
+            for (Passenger passenger : allPassengers) {
+                boolean b = checkFareInRange(Constants.FIRST_FARE_RANGE_MIN, Constants.SECOND_FARE_RANGE_MIN,Constants.FIRST_FARE_RANGE_INDEX,passenger, allPassengersByFare, survivedPassengersByFare) ||
+                        checkFareInRange(Constants.SECOND_FARE_RANGE_MIN,Constants.THIRD_FARE_RANGE_MIN,Constants.SECOND_FARE_RANGE_INDEX,passenger, allPassengersByFare, survivedPassengersByFare) ||
+                        checkFareInRange(Constants.THIRD_FARE_RANGE_MIN, Integer.MAX_VALUE,Constants.THIRD_FARE_RANGE_INDEX, passenger, allPassengersByFare, survivedPassengersByFare);
+            }
+            for (int i = 0; i < Constants.TOTAL_FARE_RANGES; i++) {
+                result[i] = ((double)survivedPassengersByFare[i]*Constants.MAXIMUM_PERCENTAGE)/(double)allPassengersByFare[i];
+            }
+            return result;
+        }
+
+        private double[] getSurvivedPercentageEmbarked(ArrayList<Passenger> allPassengers){
+            int[] allPassengersByEmbarked = new int[Constants.TOTAL_EMBARKED_OPTIONS];
+            int[] survivedPassengersByEmbarked = new int[Constants.TOTAL_EMBARKED_OPTIONS];
+            double[] result = new double[Constants.TOTAL_EMBARKED_OPTIONS];
+            for (Passenger passenger : allPassengers) {
+               boolean b = checkEmbarked(Constants.C_EMBARKED,Constants.C_EMBARKED_INDEX,passenger, allPassengersByEmbarked, survivedPassengersByEmbarked) ||
+                       checkEmbarked(Constants.Q_EMBARKED, Constants.Q_EMBARKED_INDEX, passenger, allPassengersByEmbarked, survivedPassengersByEmbarked) ||
+                       checkEmbarked(Constants.S_EMBARKED, Constants.S_EMBARKED_INDEX, passenger, allPassengersByEmbarked, survivedPassengersByEmbarked);
+                }
+            for (int i = 0; i < Constants.TOTAL_EMBARKED_OPTIONS; i++) {
+                result[i] = ((double)survivedPassengersByEmbarked[i]*Constants.MAXIMUM_PERCENTAGE)/(double)allPassengersByEmbarked[i];
+            }
+            return result;
+    }
+
+
+        private boolean checkEmbarked(char embarked, int index, Passenger passenger, int[] allPassengersByEmbarked, int[] survivedPassengersByEmbarked) {
+        boolean result = false;
+        if (passenger.matchesEmbarked(embarked)){
+            allPassengersByEmbarked[index]++;
+            if (passenger.isSurvived()){
+                survivedPassengersByEmbarked[index]++;
+            }
+            result = true;
+        }
+        return result;
+        }
+
+
+        private boolean checkFareInRange(int min, int max, int index, Passenger passenger, int[] allPassengersByFare, int[] survivedPassengersByFare){
+            boolean result = false;
+            if (passenger.fareInRange(min, max)){
+                allPassengersByFare[index]++;
+                if (passenger.isSurvived()){
+                    survivedPassengersByFare[index]++;
+                }
+                result = true;
+            }
+            return result;
+        }
+
+    private boolean checkAgeInRange(int min, int max, int index, Passenger passenger, int[] allPassengersByAge, int[] survivedPassengersByAge){
+        boolean result = false;
+        if (passenger.ageInRange(min, max)){
+            allPassengersByAge[index]++;
+            if (passenger.isSurvived()){
+                survivedPassengersByAge[index]++;
+            }
+            result = true;
+        }
+        return result;
+    }
 
 
     private void createFile (ArrayList<Passenger> searchList) {

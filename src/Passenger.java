@@ -188,4 +188,25 @@
      public boolean isMale() {
          return isMale;
      }
+
+     public boolean ageInRange(float min, float max) {
+            boolean result = false;
+         if (this.age != null) {
+            result = this.age >= min && this.age < max;
+         }
+         return result;
+     }
+
+     public boolean checkFamilyMember(){
+            return (this.sibSp + this.parch) > 0;
+     }
+
+     public boolean fareInRange(float min, float max){
+            return this.fare >= min && this.fare < max;
+     }
+
+     public boolean matchesEmbarked(char embarked){
+            return this.embarked == embarked;
+     }
+
  }

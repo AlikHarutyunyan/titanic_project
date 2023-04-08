@@ -60,4 +60,66 @@ public class Constants {
 
     public static final int TOTAL_SEXES = 2;
 
+    public static final int FIRST_RANGE_MIN = 0;
+
+    public static final int SECOND_RANGE_MIN = 11;
+
+    public static final int THIRD_RANGE_MIN = 21;
+
+    public static final int FOURTH_RANGE_MIN = 31;
+
+    public static final int FIFTH_RANGE_MIN = 41;
+
+    public static final int LAST_RANGE_MIN = 51;
+
+    public static final int FIRST_RANGE_INDEX = 0;
+
+    public static final int SECOND_RANGE_INDEX = 1;
+
+    public static final int THIRD_RANGE_INDEX = 2;
+
+    public static final int FOURTH_RANGE_INDEX = 3;
+
+    public static final int FIFTH_RANGE_INDEX = 4;
+
+    public static final int LAST_RANGE_INDEX = 5;
+
+    public static final int TOTAL_RANGES= 6;
+
+    public static final double MAXIMUM_PERCENTAGE = 100.0;
+
+    public static final int MORE_THAN_ZERO_FAMILY_MEMBERS_INDEX = 0;
+
+    public static final int ZERO_FAMILY_MEMBERS_INDEX = 1;
+
+    public static final int TOTAL_FAMILY_MEMBERS_OPTIONS = 2;
+
+    public static final int FIRST_FARE_RANGE_MIN = 0;
+
+    public static final int SECOND_FARE_RANGE_MIN = 11;
+
+    public static final int THIRD_FARE_RANGE_MIN = 30;
+
+    public static final int TOTAL_FARE_RANGES = 3;
+
+    public static final int FIRST_FARE_RANGE_INDEX = 0;
+
+    public static final int SECOND_FARE_RANGE_INDEX = 1;
+
+    public static final int THIRD_FARE_RANGE_INDEX = 2;
+
+    public static final int C_EMBARKED_INDEX = 0;
+
+    public static final int Q_EMBARKED_INDEX = 1;
+
+    public static final int S_EMBARKED_INDEX = 2;
+
+    public static final int TOTAL_EMBARKED_OPTIONS = 3;
+
+    public static final char C_EMBARKED = 'C';
+
+    public static final char Q_EMBARKED = 'Q';
+
+    public static final char S_EMBARKED = 'S';
+
 }
