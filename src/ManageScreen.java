@@ -192,14 +192,38 @@ public class ManageScreen extends JPanel {
                 double[] survivedPercentageByFair = getSurvivedPercentageByFare(allPassengers);
                 double[] survivedPercentageByEmbarked = getSurvivedPercentageEmbarked(allPassengers);
                 File statisticsFile = createStatisticsFile();
+                writeToFile(statisticsFile, createTxt(survivedPercentageByClass,survivedPercentageBySex, survivedPercentageByAge, survivedPercentageByFamilyMembers, survivedPercentageByFair, survivedPercentageByEmbarked));
             });
         }
     }
 
     private String createTxt(double[] survivedPercentageByClass, double[] survivedPercentageBySex, double[] survivedPercentageByAge, double[] survivedPercentageByFamilyMembers, double[] survivedPercentageByFair, double[] survivedPercentageByEmbarked){
-        String output = "Survived percentage by class: " + "\n 1st class - " + survivedPercentageByClass[Constants.PCLASS_ONE_INDEX] + "%" +
-
-
+        String output = "Survived percentage by class: " +
+                "\n 1st class - " + survivedPercentageByClass[Constants.PCLASS_ONE_INDEX] + "%" +
+                "\n 2nd class - " + survivedPercentageByClass[Constants.PCLASS_TWO_INDEX] + "%" +
+                "\n 3nd class - " + survivedPercentageByClass[Constants.PCLASS_THREE_INDEX] + "%" +
+                "\n\n Survived percentage by sex: " +
+                "\n Female - " + survivedPercentageBySex[Constants.FEMALE_INDEX] + "%" +
+                "\n Male - " + survivedPercentageBySex[Constants.MALE_INDEX] + "%" +
+                "\n\n Survived percentage by age: " +
+                "\n 0-10 - " + survivedPercentageByAge[Constants.FIRST_RANGE_INDEX] + "%" +
+                "\n 11-20 - " + survivedPercentageByAge[Constants.SECOND_RANGE_INDEX] + "%" +
+                "\n 21-30 - " + survivedPercentageByAge[Constants.THIRD_RANGE_INDEX] + "%" +
+                "\n 31-40 - " + survivedPercentageByAge[Constants.FOURTH_RANGE_INDEX] + "%" +
+                "\n 41-50 - " + survivedPercentageByAge[Constants.FIFTH_RANGE_INDEX] + "%" +
+                "\n Older than 51 - " + survivedPercentageByAge[Constants.LAST_RANGE_INDEX] + "%" +
+                "\n\n Survived percentage by amount of family members: " +
+                "\n At least one family members - " + survivedPercentageByFamilyMembers[Constants.MORE_THAN_ZERO_FAMILY_MEMBERS_INDEX] + "%" +
+                "\n 0 family members - " + survivedPercentageByFamilyMembers[Constants.ZERO_FAMILY_MEMBERS_INDEX] + "%" +
+                "\n\n Survived percentage by fare: " +
+                "\n Less than 11 pounds - " + survivedPercentageByFair[Constants.FIRST_FARE_RANGE_INDEX] + "%" +
+                "\n 11-30 pounds - " + survivedPercentageByFair[Constants.SECOND_FARE_RANGE_INDEX] + "%" +
+                "\n More than 30 pounds - " + survivedPercentageByFair[Constants.THIRD_FARE_RANGE_INDEX] + "%" +
+                "\n\n Survived percentage by embarked - " +
+                "\n C - " + survivedPercentageByEmbarked[Constants.C_EMBARKED_INDEX] + "%" +
+                "\n Q - " + survivedPercentageByEmbarked[Constants.Q_EMBARKED_INDEX] + "%" +
+                "\n S - " + survivedPercentageByEmbarked[Constants.S_EMBARKED_INDEX] + "%";
+        return output;
     }
 
     private File createStatisticsFile(){
