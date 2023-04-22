@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -166,6 +165,8 @@ public class ManageScreen extends JPanel {
                     }
                     ArrayList<Passenger> searchResult = this.performSearch(this.allPassengers.subList(min, max), sibSpPassenger, parchPassenger,
                             minPassengerTicketFare, maxPassengerTicketFare, pClass, passengerName, sexOfPassenger, passengerTicket, passengerCabin, passengerEmbarked);
+
+                    this.sortByName(searchResult);
                     System.out.println(searchResult);
                     int countSurvived = this.countSurvived(searchResult);
                     searchResultLabel.setText("Total passengers: " + searchResult.size() + " (" + countSurvived + " survived, " + (searchResult.size() - countSurvived) + " did not)");
@@ -177,6 +178,7 @@ public class ManageScreen extends JPanel {
                 }
 
             });
+
 
             this.statistics = new JButton("Create statistics file");
             int statisticsButtonWidth = statistics.getPreferredSize().width + Constants.LABEL_PADDING_RIGHT;
@@ -194,6 +196,23 @@ public class ManageScreen extends JPanel {
                 File statisticsFile = createStatisticsFile();
                 writeToFile(statisticsFile, createTxt(survivedPercentageByClass,survivedPercentageBySex, survivedPercentageByAge, survivedPercentageByFamilyMembers, survivedPercentageByFair, survivedPercentageByEmbarked));
             });
+        }
+    }
+
+    private void sortByName(List <Passenger> passengers)
+    {
+        for (int i = 0; i<passengers.size(); i++)
+        {
+            for (int j = i+1; j<passengers.size(); j++)
+            {
+                if (passengers.get(i).compareByLetters(passengers.get(j)))
+                {
+                    Passenger tempI = passengers.get(i);
+                    passengers.set(i,passengers.get(j));
+                    passengers.set(j, tempI);
+
+                }
+            }
         }
     }
 

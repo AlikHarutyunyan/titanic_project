@@ -209,4 +209,9 @@
             return this.embarked == embarked;
      }
 
+
+
+     public boolean compareByLetters(Passenger other){
+            return this.name.compareTo(other.name) > 0;
+     }
  }
