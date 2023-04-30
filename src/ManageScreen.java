@@ -17,16 +17,14 @@ public class ManageScreen extends JPanel {
     private JTextField passengerCabinField;
     private JComboBox<String> passengerEmbarkedComboBox;
     private JComboBox<String> sexOfPassengerComboBox;
-    private JButton sync;
 
     private JButton statistics;
     private ArrayList<Passenger> allPassengers;
 
     public ManageScreen(int x, int y, int width, int height) {
-        File file = new File(Constants.PATH_TO_DATA_FILE); //this is the path to the data file
+        File file = new File(Constants.PATH_TO_DATA_FILE);
         if (file.exists()) {
             this.allPassengers = removePotentialDuplicates(readData(file));
-            System.out.println(allPassengers);
             this.setLayout(null);
             this.setBounds(x, y + Constants.MARGIN_FROM_TOP, width, height);
 
@@ -128,9 +126,9 @@ public class ManageScreen extends JPanel {
             this.add(passengerEmbarkedComboBox);
 
 
-            this.sync = new JButton("Synchronize");
+            JButton sync = new JButton("Synchronize");
             int buttonWidth = sync.getPreferredSize().width + Constants.LABEL_PADDING_RIGHT;
-            this.sync.setBounds((this.getWidth() - buttonWidth) / 2, passengerEmbarkedComboBox.getY() + passengerEmbarkedComboBox.getHeight() + Constants.MARGIN_FROM_TOP, buttonWidth, Constants.COMBO_BOX_HEIGHT);
+            sync.setBounds((this.getWidth() - buttonWidth) / 2, passengerEmbarkedComboBox.getY() + passengerEmbarkedComboBox.getHeight() + Constants.MARGIN_FROM_TOP, buttonWidth, Constants.COMBO_BOX_HEIGHT);
             this.add(sync);
 
             JLabel searchResultLabel = new JLabel("Total passengers: XXX (XXX survived, XXX did not)");
@@ -139,7 +137,7 @@ public class ManageScreen extends JPanel {
             searchResultLabel.setVisible(false);
             this.add(searchResultLabel);
 
-            this.sync.addActionListener((e) -> {
+            sync.addActionListener((e) -> {
                 String minPassengerId = this.minPassengerIdField.getText().trim();
                 String maxPassengerId = this.maxPassengerIdField.getText().trim();
                 String pClass = (String) this.pClassComboBox.getSelectedItem();
@@ -163,18 +161,18 @@ public class ManageScreen extends JPanel {
                     if (!maxPassengerId.equals("") && Integer.parseInt(maxPassengerId) < this.allPassengers.size()) {
                         max = Integer.parseInt(maxPassengerId);
                     }
-                    ArrayList<Passenger> searchResult = this.performSearch(this.allPassengers.subList(min, max), sibSpPassenger, parchPassenger,
+                    ArrayList<Passenger> searchResult = this.performSearch(this.cutListByPassengerId(this.allPassengers,min,max), sibSpPassenger, parchPassenger,
                             minPassengerTicketFare, maxPassengerTicketFare, pClass, passengerName, sexOfPassenger, passengerTicket, passengerCabin, passengerEmbarked);
 
                     this.sortByName(searchResult);
-                    System.out.println(searchResult);
                     int countSurvived = this.countSurvived(searchResult);
                     searchResultLabel.setText("Total passengers: " + searchResult.size() + " (" + countSurvived + " survived, " + (searchResult.size() - countSurvived) + " did not)");
                     searchResultLabel.setVisible(true);
                     this.createFile(searchResult);
 
                 } else {
-                    System.out.println("You Put Incorrect Values");
+                    searchResultLabel.setText("                      You put incorrect Values");
+                    searchResultLabel.setVisible(true);
                 }
 
             });
@@ -187,6 +185,7 @@ public class ManageScreen extends JPanel {
 
             this.statistics.addActionListener((e) -> {
                 this.statistics.setEnabled(false);
+                this.statistics.setText("DONE!");
                 double[] survivedPercentageByClass = getSurvivedPercentageByClass(allPassengers);
                 double[] survivedPercentageBySex = getSurvivedPercentageBySex(allPassengers);
                 double[] survivedPercentageByAge = getSurvivedPercentageByAge(allPassengers);
@@ -197,6 +196,16 @@ public class ManageScreen extends JPanel {
                 writeToFile(statisticsFile, createTxt(survivedPercentageByClass,survivedPercentageBySex, survivedPercentageByAge, survivedPercentageByFamilyMembers, survivedPercentageByFair, survivedPercentageByEmbarked));
             });
         }
+    }
+
+    private ArrayList<Passenger> cutListByPassengerId(ArrayList<Passenger> passengers, int min, int max){
+        ArrayList<Passenger> result = new ArrayList<>();
+        for(Passenger passenger : passengers){
+            if(passenger.getPassengerId() >= min && passenger.getPassengerId() <= max){
+                result.add(passenger);
+            }
+        }
+        return result;
     }
 
     private void sortByName(List <Passenger> passengers)
@@ -217,7 +226,7 @@ public class ManageScreen extends JPanel {
     }
 
     private String createTxt(double[] survivedPercentageByClass, double[] survivedPercentageBySex, double[] survivedPercentageByAge, double[] survivedPercentageByFamilyMembers, double[] survivedPercentageByFair, double[] survivedPercentageByEmbarked){
-        String output = "Survived percentage by class: " +
+        return "Survived percentage by class: " +
                 "\n 1st class - " + survivedPercentageByClass[Constants.PCLASS_ONE_INDEX] + "%" +
                 "\n 2nd class - " + survivedPercentageByClass[Constants.PCLASS_TWO_INDEX] + "%" +
                 "\n 3nd class - " + survivedPercentageByClass[Constants.PCLASS_THREE_INDEX] + "%" +
@@ -242,11 +251,10 @@ public class ManageScreen extends JPanel {
                 "\n C - " + survivedPercentageByEmbarked[Constants.C_EMBARKED_INDEX] + "%" +
                 "\n Q - " + survivedPercentageByEmbarked[Constants.Q_EMBARKED_INDEX] + "%" +
                 "\n S - " + survivedPercentageByEmbarked[Constants.S_EMBARKED_INDEX] + "%";
-        return output;
     }
 
     private File createStatisticsFile(){
-        boolean success = false;
+        boolean success;
         File statsFile = new File(Constants.DATA_PATH + "/statistics.txt");
         try {
             if (!statsFile.exists()){
@@ -323,7 +331,7 @@ public class ManageScreen extends JPanel {
         int[] survivedPassengersByAge = new int[Constants.TOTAL_RANGES];
         double[] result = new double[Constants.TOTAL_RANGES];
         for (Passenger passenger : allPassengers) {
-            boolean b = this.checkAgeInRange(Constants.FIRST_RANGE_MIN, Constants.SECOND_RANGE_MIN, Constants.FIRST_RANGE_INDEX, passenger, allPassengersByAge, survivedPassengersByAge) ||
+            boolean shortCircuit = this.checkAgeInRange(Constants.FIRST_RANGE_MIN, Constants.SECOND_RANGE_MIN, Constants.FIRST_RANGE_INDEX, passenger, allPassengersByAge, survivedPassengersByAge) ||
                     this.checkAgeInRange(Constants.SECOND_RANGE_MIN, Constants.THIRD_RANGE_MIN, Constants.SECOND_RANGE_INDEX, passenger, allPassengersByAge, survivedPassengersByAge) ||
                     this.checkAgeInRange(Constants.THIRD_RANGE_MIN, Constants.FOURTH_RANGE_MIN, Constants.THIRD_RANGE_INDEX, passenger, allPassengersByAge, survivedPassengersByAge) ||
                     this.checkAgeInRange(Constants.FOURTH_RANGE_MIN, Constants.FIFTH_RANGE_MIN, Constants.FOURTH_RANGE_INDEX, passenger, allPassengersByAge, survivedPassengersByAge) ||
@@ -363,7 +371,7 @@ public class ManageScreen extends JPanel {
             int[] survivedPassengersByFare = new int[Constants.TOTAL_FARE_RANGES];
             double[] result = new double[Constants.TOTAL_FARE_RANGES];
             for (Passenger passenger : allPassengers) {
-                boolean b = checkFareInRange(Constants.FIRST_FARE_RANGE_MIN, Constants.SECOND_FARE_RANGE_MIN,Constants.FIRST_FARE_RANGE_INDEX,passenger, allPassengersByFare, survivedPassengersByFare) ||
+                boolean shortCircuit = checkFareInRange(Constants.FIRST_FARE_RANGE_MIN, Constants.SECOND_FARE_RANGE_MIN,Constants.FIRST_FARE_RANGE_INDEX,passenger, allPassengersByFare, survivedPassengersByFare) ||
                         checkFareInRange(Constants.SECOND_FARE_RANGE_MIN,Constants.THIRD_FARE_RANGE_MIN,Constants.SECOND_FARE_RANGE_INDEX,passenger, allPassengersByFare, survivedPassengersByFare) ||
                         checkFareInRange(Constants.THIRD_FARE_RANGE_MIN, Integer.MAX_VALUE,Constants.THIRD_FARE_RANGE_INDEX, passenger, allPassengersByFare, survivedPassengersByFare);
             }
@@ -378,7 +386,7 @@ public class ManageScreen extends JPanel {
             int[] survivedPassengersByEmbarked = new int[Constants.TOTAL_EMBARKED_OPTIONS];
             double[] result = new double[Constants.TOTAL_EMBARKED_OPTIONS];
             for (Passenger passenger : allPassengers) {
-               boolean b = checkEmbarked(Constants.C_EMBARKED,Constants.C_EMBARKED_INDEX,passenger, allPassengersByEmbarked, survivedPassengersByEmbarked) ||
+               boolean shortCircuit = checkEmbarked(Constants.C_EMBARKED,Constants.C_EMBARKED_INDEX,passenger, allPassengersByEmbarked, survivedPassengersByEmbarked) ||
                        checkEmbarked(Constants.Q_EMBARKED, Constants.Q_EMBARKED_INDEX, passenger, allPassengersByEmbarked, survivedPassengersByEmbarked) ||
                        checkEmbarked(Constants.S_EMBARKED, Constants.S_EMBARKED_INDEX, passenger, allPassengersByEmbarked, survivedPassengersByEmbarked);
                 }
@@ -428,7 +436,6 @@ public class ManageScreen extends JPanel {
 
 
     private void createFile (ArrayList<Passenger> searchList) {
-        //TODO SORT THE ARRAY LIST BY NAME IF NECESSARY (CHECK LATER)
             File file = new File(Constants.CURRENT_NUMBER_FILE);
             boolean success = false;
             if (!file.exists()) {
@@ -437,14 +444,19 @@ public class ManageScreen extends JPanel {
                 } catch (Exception g) {
                     System.out.println("Error creating the file: " + g.getMessage());
                 }
+                if(!success){
+                    System.out.println("Something went wrong!");
+                }
             }
 
             try {
                 BufferedReader bufferedReader = new BufferedReader(new FileReader(Constants.CURRENT_NUMBER_FILE));
                 String name = bufferedReader.readLine();
                 File newFile = new File(Constants.DATA_PATH + name + ".csv");
-                newFile.createNewFile();
-                writeToFile(newFile,this.createCsvSheet(searchList));
+                boolean res = newFile.createNewFile();
+                if(res) {
+                    writeToFile(newFile, this.createCsvSheet(searchList));
+                }
                 writeToFile(file, Integer.parseInt(name)+1 + "");
 
             } catch (Exception e) {
@@ -468,7 +480,7 @@ public class ManageScreen extends JPanel {
     }
 
     private String createCsvSheet (ArrayList<Passenger> passengers) {
-        String outPut = "PassengerId,Survived,Pclass,Name,Sex,Age,SibSp,Parch,Ticket,Fare,Cabin,Embarked";
+        String outPut = "PassengerId,Survived,PClass,Name,Sex,Age,SibSp,Parch,Ticket,Fare,Cabin,Embarked";
         for (Passenger passenger: passengers) {
             outPut += "\n" + passenger.toString();
         }

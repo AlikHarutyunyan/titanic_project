@@ -5,7 +5,6 @@ public class Constants {
     public static final String[] PASSENGER_CLASS_OPTIONS = { "All", "1", "2", "3"};
     public static final int MARGIN_FROM_TOP = 10;
     public static final int MARGIN_FROM_LEFT = 5;
-    public static final int LABEL_WIDTH = 100;
     public static final int LABEL_HEIGHT = 30;
     public static final int COMBO_BOX_WIDTH = 80;
     public static final int COMBO_BOX_HEIGHT = 30;
@@ -29,8 +28,6 @@ public class Constants {
     public static final int PASSENGER_NAME_FIELD_WIDTH = 160;
 
     public static final String[] PASSENGER_SEX_OPTIONS = { "All", "Female", "Male"};
-
-    public static final int SIB_SP_PASSENGER_LABEL_WIDTH = 155;
 
     public static final int PASSENGER_TICKET_FIELD_WIDTH = 100;
 
